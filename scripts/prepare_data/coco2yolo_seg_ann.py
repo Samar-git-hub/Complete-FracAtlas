@@ -9,19 +9,25 @@ def convert_coco_to_yolo_segmentation(json_path, csv_path, output_dir, target_cl
     print(f"Loading annotations from: {json_path}")
     print(f"Loading image list from: {csv_path}")
 
+    # Converting the COCO JSON file to a dictionary
     with open(json_path, 'r') as f:
         coco_data = json.load(f)
-
+    
     df = pd.read_csv(csv_path)
     all_filenames = set(df['image_id'].tolist())
 
+    # Creating two dictionaries
+    # img_id_map links the id to the image metadata
+    # filename_to_img_id links the filename to the image id
     img_id_map = {}
     filename_to_img_id = {}
-
+    
     for img in coco_data['images']:
         img_id_map[img['id']] = img
         filename_to_img_id[img['file_name']] = img['id']
     
+    # ann_map links the image id to the list of annotations dictionaries
+    # One image may have multiple fracture instances, their annotations are grouped together
     ann_map = {}
     for ann in coco_data['annotations']:
         img_id = ann['image_id']
@@ -36,9 +42,10 @@ def convert_coco_to_yolo_segmentation(json_path, csv_path, output_dir, target_cl
         txt_filename = os.path.splitext(filename)[0] + ".txt"
         output_path = os.path.join(output_dir, txt_filename)
 
+        # If image contains fracture, create YOLO annotations
         if filename in filename_to_img_id:
-            img_id = filename_to_img_id[filename]
 
+            img_id = filename_to_img_id[filename]
             img_w = img_id_map[img_id]['width']
             img_h = img_id_map[img_id]['height']
 
@@ -46,8 +53,10 @@ def convert_coco_to_yolo_segmentation(json_path, csv_path, output_dir, target_cl
 
             yolo_lines = []
 
+            # In case of multiple fracture instances, loop through them
             for ann in annotations:
                 for segment in ann['segmentation']:
+                    
                     normalized_coords = []
 
                     for i in range(0, len(segment), 2):
@@ -69,6 +78,7 @@ def convert_coco_to_yolo_segmentation(json_path, csv_path, output_dir, target_cl
             with open(output_path, 'w') as f:
                 f.write("\n".join(yolo_lines))
 
+        # If no fracture (healthy bone), skip the yolo annotations (blank txt file)
         else:
             with open(output_path, 'w') as f:
                 pass
@@ -84,5 +94,5 @@ if __name__ == "__main__":
 
     JSON_PATH = os.path.join(project_root, 'FracAtlas', 'Annotations', 'COCO JSON', 'COCO_fracture_masks.json')
     CSV_PATH = os.path.join(project_root, 'FracAtlas', 'dataset.csv')
-    OUTPUT_DIR = os.path.join(project_root, 'FracAtlas', 'labels_yolo_seg')
+    OUTPUT_DIR = os.path.join(project_root, 'FracAtlas', 'Annotations', 'YOLO SEG')
     convert_coco_to_yolo_segmentation(JSON_PATH, CSV_PATH, OUTPUT_DIR)
