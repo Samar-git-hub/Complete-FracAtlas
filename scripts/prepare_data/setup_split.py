@@ -67,7 +67,7 @@ def setup_overall_split(root_dir):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     overall_train.to_csv(output_dir / "train.csv", index=False)
-    overall_val.to_csv(output_dir / "val.csv", index=False)
+    overall_val.to_csv(output_dir / "valid.csv", index=False)
     overall_test.to_csv(output_dir / "test.csv", index=False)
 
     print(f"Overall Split saved to: {output_dir}")

@@ -208,4 +208,6 @@ __marimo__/
 
 # My modifications (dataset and notes text file)
 FracAtlas/
-Notepad
+Notepad.txt
+FracAtlas_Classifier_Dataset/
+FracAtlas_segmentor_Dataset/
