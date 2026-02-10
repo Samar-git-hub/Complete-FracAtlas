@@ -79,7 +79,7 @@ def setup_directories():
     print(f"\nCreating data.yaml for Segmentor")
 
     seg_yaml = {
-        'path': '.',
+        'path': str(OUTPUT_SEG_DIR),
         'train': 'images/train',
         'val': 'images/val',
         'test': 'images/test',
