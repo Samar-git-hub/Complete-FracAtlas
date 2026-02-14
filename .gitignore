@@ -212,3 +212,5 @@ Notepad.txt
 FracAtlas_Classifier_Dataset/
 FracAtlas_segmentor_Dataset/
 runs/
+yolo26n.pt
+yolov8s-seg.pt
