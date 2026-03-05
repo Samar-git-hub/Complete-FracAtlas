@@ -13,8 +13,8 @@ RUNS_DIR = PROJECT_ROOT / "runs" / "segment"
 
 def train():
 
-    print(f"Loading YOLOv8 Small Segmentor")
-    model = YOLO('yolov8s-seg.pt')
+    print(f"Loading YOLO11 Medium Segmentor")
+    model = YOLO('yolo11m-seg.pt')
 
     print(f"Starting training on {DATASET_DIR}")
     
@@ -22,9 +22,9 @@ def train():
     results = model.train(
         data=str(YAML_PATH),
         project=str(RUNS_DIR),
-        name="fracatlas_small_batch",
+        name="fracatlas_medium_yolo11",
         epochs=100,
-        imgsz=640,
+        imgsz=600,
         batch=16,
         seed=0,
         pretrained=False,
@@ -47,7 +47,7 @@ def train():
     best_weight_path = save_dir / "weights" / "best.pt"
 
     if best_weight_path.exists():
-        target_path = MODELS_DIR / "segmentor_small_batch.pt"
+        target_path = MODELS_DIR / "segmentor_medium_yolo11.pt"
         shutil.copy(best_weight_path, target_path)
         print(f"Best model saved to: {target_path}")
     else:

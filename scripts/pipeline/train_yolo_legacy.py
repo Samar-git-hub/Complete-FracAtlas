@@ -18,11 +18,10 @@ def train():
 
     print(f"Starting training on {DATASET_DIR}")
     
-    # Changes might be induced due to library version differences
-    # Note: Install albumentations in the environment, yolo uses it automatically (the original FracAtlas implementation used this)
-    # Note: The author implementation mentions '608' images in the training logs. 
-    # This contradicts the distribution split of 574 training images (possibly risking data leakage)
-    # This is the likely cause of the discrepancy
+    # Make sure to install albumentations in the environment (the baseline study used it)
+    # The baseline has a mysterious 608 number of training images, while the distribution points to 574 images
+    # This is likely to be the source of the discrepancy between the baseline results and the results of this study
+    # Further changes might be induced due to library version differences
     results = model.train(
         data=str(YAML_PATH),
         project=str(RUNS_DIR),
